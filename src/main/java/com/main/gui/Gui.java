@@ -12,6 +12,7 @@ package com.main.gui;
 // GUI handles
 import javax.swing.*;
 
+
 /*
 * Main GUI class, all other class should derive from this
 *
