@@ -29,9 +29,9 @@ public class Db {
     // TODO: @ First meeting , we should do a database layout so that these can be filled.
 
     // @ Precious fix this to be correct statements, its throwing errors.
-    static String MainHospitalDbFormat = "CREATE TABLE IF NOT EXISTS Hospital";
+    static String MainHospitalDbFormat = "CREATE TABLE IF NOT EXISTS Hospital (name TEXT)";
 
-    static String PatientsDbFormat = "CREATE TABLE IF NOT EXISTS Patients ()";
+    static String PatientsDbFormat = "CREATE TABLE IF NOT EXISTS Patients (name TEXT)";
 
     // connection to the database.
     static Connection conn;
@@ -100,6 +100,9 @@ public class Db {
     }
     public Db getInstance(){
         return this;
+    }
+    public void insert(){
+
     }
 
 
