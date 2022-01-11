@@ -34,5 +34,6 @@ public class Gui {
         c.getText();
         f.setLayout(null);//using no layout managers
         f.setVisible(true);//making the frame visible
+        // create empty JTextField
     }
 }
