@@ -24,10 +24,14 @@ public class Gui {
 
         JButton b=new JButton("click");//creating instance of JButton
         b.setBounds(130,100,100, 40);//x axis, y axis, width, height
-
+        JTextArea c = new JTextArea();
+        c.setSize(100,100);
+        f.add(c);
         f.add(b);//adding button in JFrame
 
         f.setSize(400,500);//400 width and 500 height
+        // ()c.toString()4
+        c.getText();
         f.setLayout(null);//using no layout managers
         f.setVisible(true);//making the frame visible
     }
