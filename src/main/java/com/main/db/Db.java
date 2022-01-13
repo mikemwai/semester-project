@@ -71,6 +71,7 @@ public class Db {
             throw e;
         }
     }
+
     /// This function creates the Database tables and should
     /// be called at least once in the duration of the application.
     private void createTables() throws SQLException {
@@ -93,17 +94,11 @@ public class Db {
             //throw e;
         }
 
-
         LOGGER.info("Finished Executing Table Initialization");
         // TODO: @Precious add more values tables if need be
 
     }
-    public Db getInstance(){
-        return this;
-    }
-    public void insert(){
 
-    }
 
 
 }
