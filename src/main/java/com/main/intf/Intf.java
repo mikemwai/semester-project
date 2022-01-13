@@ -2,29 +2,14 @@ package com.main.intf;
 
 import java.util.Date;
 
-// an example of a datatype you may use.
-
-class Doctors{
+class Patients{
     String name;
-    Date dob;
-}
+    Date DateOfBirth;
+    String Sickness;
+    String AssignedPersonnel;
+    int PatientID;
 
-
-class Login{
-    String username;
-    String password;
-
-    public static void toDb(){
+    public Patients(String name, String DateOfBirth,String Sickness, String AssignmentPersonnel,String PatientID){
 
     }
-}
-
-public class Intf {
-
-    public static void main(String[] args) {
-     // code goes here.
-    }
-     public String createDb(){
-        return "INSERT INTO __values()";
-     }
 }
