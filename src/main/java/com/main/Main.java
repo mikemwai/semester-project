@@ -18,8 +18,6 @@ public class Main {
     public static void main(String[] args) {
 
         Console.main(args);
-	    // write your code here
-        LOGGER.info("Welcome to ...., we are glad you are here.");
-        //Gui.main(null);
+
     }
 }
