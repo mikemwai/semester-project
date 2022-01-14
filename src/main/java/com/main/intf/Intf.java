@@ -1,80 +1,75 @@
 package com.main.intf;
 
+import com.main.db.Db;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
-import com.main.db.Db;
+/*
+ * An interface implementing Input output.
+ * A class extending this interface implements File Input/Output
+ *
+ * The class is generic because the values returned by readFromFile vary
+ * depending on the class that implements them
+ */
+interface FileIO<T> {
 
-/// An interface implementing Input output.
-/// A class extending this interface implements File Input/Output
-interface FileIO{
-    /// A class extending this interface is expected to write csv values
-    // to argument @writer
-    public void writeToFile(BufferedWriter writer) throws IOException;
+    /**
+     * A class extending this interface is expected to write csv values
+     * to argument @writer
+     * <p>
+     * The method should also deal with formatting of the values in an
+     * appropriate way and whatever quirks may come up.(E.g comas in names)
+     *
+     * @param writer: The location we are writing to
+     * @throws IOException
+     */
+    void writeToFile(BufferedWriter writer) throws IOException;
 
-    /// A class extending this interface is expected to read csv values
-    // from  argument @reader
-    public String readFromFile(BufferedReader reader);
+
+    /**
+     * A class extending this interface is expected to read csv values
+     * from  argument @reader
+     * <p>
+     * This method should also deal with any errors that may arise from
+     * IO operations, e.g. opening of binary files, or malformed CSV's
+     *
+     * @param reader: The file we are reading from
+     */
+    List<T> readFromFile(BufferedReader reader);
 }
-interface DbInterface{
-    public void writeToDb(Db db);
 
-    public void readFromDb(Db db);
+interface DbInterface {
+    void writeToDb(Db db);
+
+    void readFromDb(Db db);
 }
-class Patients implements FileIO,DbInterface
-{
-    String name;
-    Date DateOfBirth;
-    String Sickness;
-    String AssignedPersonnel;
-    int PatientID;
 
-    public Patients(String name, String DateOfBirth,String Sickness, String AssignmentPersonnel,String PatientID){
-
-    }
-
-    @Override
-    public void writeToFile(BufferedWriter writer) throws IOException {
-        writer.write(name+",");
-    }
-
-    @Override
-    public String readFromFile(BufferedReader reader) {
-        return null;
-    }
-
-    @Override
-    public void writeToDb(Db db) {
-        // code that takes class patients and writes it to a database
-
-    }
-
-    @Override
-    public void readFromDb(Db db) {
-
-    }
-}
-class Doctors
-{
+class Doctors {
     String Name;
     int Doctor_Id;
     String Profession;
 }
-class Appointments
-{
+
+class Appointments {
 
 }
-class Labs
-{
+
+class Labs {
 
 }
-class Pharmacy
-{
+
+class Pharmacy {
 
 }
-class Office
-{
+
+class Office {
 
 }
