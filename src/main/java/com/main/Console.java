@@ -25,19 +25,13 @@ public class Console {
                 // cin>>choice;
                 int choice = input.nextInt();
 
-                switch (choice){
-                    case 1:
-                        // Woow....
+                switch (choice) {
+                    case 1 ->
+                            // Wow....
 
-                        console();
-
-                        break;
-                    case 2:
-                        System.out.println("GUI not available, try later");
-                        break;
-                    default:
-                        System.out.println("Choice "+choice+" not known , choose either 1 or 2");
-                        break;
+                            console();
+                    case 2 -> System.out.println("GUI not available, try later");
+                    default -> System.out.println("Choice " + choice + " not known , choose either 1 or 2");
                 }
 
             } catch (Exception e) {
@@ -48,8 +42,18 @@ public class Console {
 
     }
 
-    public static void console(){
+    public static void console()
+    {
         System.out.println("Welcome to console mode");
+        System.out.println("Choose either \n1.) Registration \n2.) Admin");
+        Scanner input=new Scanner(System.in);
+        int choice2=input.nextInt();
+
+        switch (choice2) {
+            case 1 -> System.out.println("Still under construction!");
+            case 2 -> System.out.println("Still under Construction!");
+            default -> System.out.println("Still under Construction!!");
+        }
 
     }
 
