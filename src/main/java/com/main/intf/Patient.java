@@ -22,7 +22,7 @@ public class Patient implements FileIO<Patient>, DbInterface {
     // String functions.
     String name;
     String sickness;
-    String assignedPersonnel;
+    public  String assignedPersonnel;
     // Date and time functions
     Date dateOfBirth;
     Date reportTime;
@@ -33,11 +33,15 @@ public class Patient implements FileIO<Patient>, DbInterface {
         // TODO: This will be changed once we have a cool way to create them
         Random rand = new Random();
 
-        this.PatientID = rand.nextInt();
+        this.PatientID = Math.abs(rand.nextInt());
 
         System.out.println("Patient "+name+" assigned ID "+ this.PatientID);
 
+        System.out.println("===========================================");
+
         this.sickness = sickness;
+
+        this.name = name;
 
         this.reportTime = new  Date();
 
@@ -54,7 +58,16 @@ public class Patient implements FileIO<Patient>, DbInterface {
     @Override
     public void writeToFile(BufferedWriter writer) {
         try {
-            writer.write(String.format("%s,%s,%s,%s,%s %s\n", name, dateOfBirth, sickness, assignedPersonnel, reportTime, PatientID));
+            // format date to something easy to parse
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+            String dob=dateFormat.format(dateOfBirth);
+
+            String report = dateFormat.format(reportTime);
+            // Finally, write to the file.
+            writer.write(String.format("%s,%s,%s,%s,%s,%s\n", name, dob, sickness, assignedPersonnel, report, PatientID));
+            writer.flush();
+
         } catch (IOException e) {
             // Exit process.
             LOGGER.error(e);
