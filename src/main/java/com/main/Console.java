@@ -4,6 +4,9 @@ import com.main.intf.Patient;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -15,6 +18,9 @@ public class Console {
 
     private static final Scanner scanner = new Scanner(System.in);
     private static final Logger LOGGER = LogManager.getLogger();
+    // This points to the patients file where we will
+    // be writing data regarding new patients.
+    private static final  File PATIENTS_FILE = new File("./patients.csv");
 
 
     public static void main(String[] args) {
@@ -124,11 +130,33 @@ public class Console {
         System.out.println("============================================");
 
         try {
-            // create the class.
-
+            // create the patient class.
             Patient patient = new Patient(name, dob, ailment, assignedPersonnel);
+
+            // create the new file, if it doesn't exist.
+            // Probably only important for the first run
+            PATIENTS_FILE.createNewFile();
+
+            // Use a buffered writer because it's good practice.
+            // NO I WILL ALWAYS CODE CORRECTLY (LEAVE ME ALONE)
+            FileWriter fw = new FileWriter(PATIENTS_FILE,true);
+
+            BufferedWriter bw = new BufferedWriter(fw);
+            // done write details
+            patient.writeToFile(bw);
+
+            // Print diagnostics
+            LOGGER.info("\n\nData for patient "+name+" written to "+PATIENTS_FILE.getAbsolutePath()+"\n\n");
+
+            System.out.println("Wait for a few minutes to see the doctor.\nNurse "+ patient.assignedPersonnel+" will come pick you up");
+
+            System.out.println("======================================================");
+
+            // Tell the logger to inform me how things are going
+
+
         } catch (Exception e) {
-            // if you fail, bail out, because I'm too lazy yo handle
+            // if you fail, bail out, because I'm too lazy to handle
             // this.
             LOGGER.error(e);
 
@@ -142,7 +170,13 @@ public class Console {
      *  Create random names for people
      * */
     String assignRandomName() {
-        String[] names = {"Leslie Barnett", "Devyn Wood", "Itzel Simpson", "Braiden Chandler", "Caitlin Berry", "Neveah Brady", "Araceli Garrett", "Kaylen Wu", "Adriana Summers", "Taryn Carrillo", "Allie Hughes", "Jordyn Barber", "Emmy Tanner", "Jax Hernandez", "Gordon Kane", "Trinity Caldwell", "Cole Robles", "Kaeden Eaton", "Summer Boyle", "Valentino Grant"};
+        String[] names = {
+                "Leslie Barnett", "Devyn Wood", "Itzel Simpson", "Braiden Chandler",
+                "Caitlin Berry", "Neveah Brady", "Araceli Garrett", "Kaylen Wu", "Adriana Summers",
+                "Taryn Carrillo", "Allie Hughes", "Jordyn Barber", "Emmy Tanner", "Jax Hernandez",
+                "Gordon Kane", "Trinity Caldwell", "Cole Robles", "Kaeden Eaton", "Summer Boyle",
+                "Valentino Grant"
+        };
 
         Random random = new Random();
 
