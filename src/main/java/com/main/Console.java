@@ -1,6 +1,7 @@
 package com.main;
 
 import com.main.intf.Patient;
+import com.main.intf.Pharmacy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,7 +22,7 @@ public class Console {
     // This points to the patients file where we will
     // be writing data regarding new patients.
     private static final  File PATIENTS_FILE = new File("./patients.csv");
-
+    private static final  File PHARMACY_FILE = new File("./pharmacy.csv");
 
     public static void main(String[] args) {
 
@@ -110,14 +111,14 @@ public class Console {
         String name = scanner.nextLine();
 
         System.out.println("Date of birth dd-mm-yyyy");
-
         String dob = scanner.nextLine();
 
         System.out.println("Ailment");
-
         String ailment = scanner.nextLine();
 
+
         String assignedPersonnel = assignRandomName();
+
 
         System.out.println("Thank you for filling the details, you have been assigned to " + assignedPersonnel);
         // Some good formatting.
@@ -132,7 +133,6 @@ public class Console {
         try {
             // create the patient class.
             Patient patient = new Patient(name, dob, ailment, assignedPersonnel);
-
             // create the new file, if it doesn't exist.
             // Probably only important for the first run
             PATIENTS_FILE.createNewFile();
@@ -154,7 +154,6 @@ public class Console {
 
             // Tell the logger to inform me how things are going
 
-
         } catch (Exception e) {
             // if you fail, bail out, because I'm too lazy to handle
             // this.
@@ -162,9 +161,49 @@ public class Console {
 
             System.exit(1);
         }
+        System.out.println("PHARMACY DEPARTMENT:");
 
+        System.out.println("PatientID");
+        String PatientID = scanner.nextLine();
 
+        System.out.println("Medicine");
+        String medicine = scanner.nextLine();
+
+        System.out.println("Price");
+        String price = scanner.nextLine();
+
+        try
+        {
+        // create the pharmacy class.
+        Pharmacy pharmacy = new Pharmacy(name, ailment, assignedPersonnel,PatientID,medicine,price);
+        // create the new file, if it doesn't exist.
+        // Probably only important for the first run
+        PHARMACY_FILE.createNewFile();
+
+        // Use a buffered writer because it's good practice.
+        // NO I WILL ALWAYS CODE CORRECTLY (LEAVE ME ALONE)
+        FileWriter fw = new FileWriter(PHARMACY_FILE,true);
+
+        BufferedWriter bw = new BufferedWriter(fw);
+        // done write details
+        pharmacy.writeToFile(bw);
+
+        // Print diagnostics
+        LOGGER.info("\n\nData for patient "+name+" written to "+PHARMACY_FILE.getAbsolutePath()+"\n\n");
+
+        // Tell the logger to inform me how things are going
+
+        }
+        catch (Exception e)
+        {
+        // if you fail, bail out, because I'm too lazy to handle
+        // this.
+        LOGGER.error(e);
+
+        System.exit(1);
+        }
     }
+
 
     /*
      *  Create random names for people
