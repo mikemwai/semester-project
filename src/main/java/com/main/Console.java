@@ -1,5 +1,4 @@
 package com.main;
-
 import com.main.intf.Doctor;
 import com.main.intf.Patient;
 import org.apache.logging.log4j.LogManager;
@@ -101,7 +100,7 @@ public class Console {
             // TODO: Change this to be Windows because presentation will probably be on windows,
             Runtime.getRuntime().exec("clear");
         } catch (Exception ignored) {
-            // Don't care if it fails.
+            // Don't care id it fails.
         }
         // Everything else.
         System.out.println("Welcome to registration :)\n" +
@@ -141,16 +140,16 @@ public class Console {
 
             // Use a buffered writer because it's good practice.
             // NO I WILL ALWAYS CODE CORRECTLY (LEAVE ME ALONE)
-            FileWriter fw = new FileWriter(PATIENTS_FILE, true);
+            FileWriter fw = new FileWriter(PATIENTS_FILE,true);
 
             BufferedWriter bw = new BufferedWriter(fw);
             // done write details
             patient.writeToFile(bw);
 
             // Print diagnostics
-            LOGGER.info("\n\nData for patient " + name + " written to " + PATIENTS_FILE.getAbsolutePath() + "\n\n");
+            LOGGER.info("Data for patient "+name+" written to "+PATIENTS_FILE.getAbsolutePath()+"\n\n");
 
-            System.out.println("Wait for a few minutes to see the doctor.\nNurse " + patient.assignedPersonnel + " will come pick you up");
+            System.out.println("Wait for a few minutes to see the doctor.\nNurse "+ patient.assignedPersonnel+" will come pick you up");
 
             System.out.println("======================================================");
 
