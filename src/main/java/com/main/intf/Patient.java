@@ -37,7 +37,7 @@ public class Patient implements FileIO<Patient>, DbInterface {
 
         System.out.println("Patient "+name+" assigned ID "+ this.PatientID);
 
-        System.out.println("===========================================");
+        System.out.println("===========================================\n\n");
 
         this.sickness = sickness;
 
