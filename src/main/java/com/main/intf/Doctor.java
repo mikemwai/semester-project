@@ -20,11 +20,12 @@ public class Doctor implements FileIO<Doctor>, DbInterface{
 
     String name;
     String profession;
-    int Doctor_Id;
+
+    String Doctor_Id;
     Date reportTime;
     public Doctor(String name, String profession, int Doctor_Id) {
         Random rand = new Random();
-        this.Doctor_Id = Math.abs(rand.nextInt());
+        this.Doctor_Id = String.valueOf(Math.abs(rand.nextInt()));
         System.out.println("Doctor" +name+"assigned ID"+this.Doctor_Id);
         System.out.println("========================================");
          this.profession = profession;
@@ -34,7 +35,9 @@ public class Doctor implements FileIO<Doctor>, DbInterface{
 
     }
 
-    public Doctor(String field, String field1, String field2, String field3) {
+
+
+    public Doctor(String name, String profession, String analysis, String Doctor_id,String reportTime) {
     }
 
     @Override
@@ -73,7 +76,8 @@ Doctor parseFromFile(String data) throws ParseException{
     return new Doctor(fields[0],
             fields[1],
             fields[2],
-            fields[3]);
+            fields[3],
+            fields[4]);
     }
     @Override
     public void writeToDb(Db db) {
