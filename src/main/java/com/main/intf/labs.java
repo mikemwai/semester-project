@@ -23,7 +23,7 @@ public class labs implements FileIO<labs>, DbInterface{
     Date processingTime;
     int cost;
 
-    public labs(String name, String specimen, String assignedPersonnel, int patientId, int personnelId, int cost, String results){
+    public labs(String name, String specimen, String assignedPersonnel, int patientId,int personnelId, int cost, String results){
         Random rand =new Random();
         this.personnelId=Math.abs(rand.nextInt());
         System.out.println("personnel"+name+"assigned Id"+this.personnelId);
