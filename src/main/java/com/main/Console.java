@@ -1,5 +1,6 @@
 package com.main;
 
+import com.main.intf.Labs;
 import com.main.intf.Patient;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -165,7 +166,73 @@ public class Console {
 
 
     }
+    private void labResults() {
+                
+        System.out.println("Please do not access.Personnel authorized only");
 
+        System.out.println("Name");
+        String name = scanner.nextLine();
+
+        System.out.println("processing time dd-mm-yyyy");
+
+        String processingTime = scanner.nextLine();
+
+        System.out.println("specimen");
+
+        String specimen = scanner.nextLine();
+        
+        System.out.println("results");
+        String results=scanner.nextLine();
+        
+        System.out.println("cost");
+        int cost=scanner.nextInt();
+
+        
+        String assignedPersonnel = assignRandomName();
+
+        System.out.println("Thank you for filling the details, you have been assigned to " + assignedPersonnel);
+        // Some good formatting.
+        System.out.println("\n\nDETAILS FOR PATIENT " + name);
+        System.out.println("____________________________________________");
+        System.out.println("NAME:\t\t\t" + name);
+        System.out.println("processingTime:\t" + processingTime);
+        System.out.println("specimen:\t\t"+specimen);
+        System.out.println("results:\t\t" + results);
+        System.out.println("The price is is:\t\t"+cost);
+        System.out.println("ASSIGNED TO:\t" + assignedPersonnel);
+        System.out.println("============================================");
+
+        try {
+            
+            Labs labs = new Labs(name, processingTime,specimen, results, assignedPersonnel);
+
+
+            File Labs_FILE = null;
+            Labs_FILE.createNewFile();
+
+           
+            FileWriter fw = new FileWriter(Labs_FILE,true);
+
+            BufferedWriter bw = new BufferedWriter(fw);
+            // done write details
+            labs.writeToFile(bw);
+
+            
+            LOGGER.info("\n\nData for patient "+name+" written to "+Labs_FILE.getAbsolutePath()+"\n\n");
+            
+
+            System.out.println("======================================================");
+
+
+
+        } catch (Exception e) {
+            LOGGER.error(e);
+
+            System.exit(1);
+        }
+
+
+    }
     /*
      *  Create random names for people
      * */

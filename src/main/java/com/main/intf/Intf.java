@@ -64,8 +64,13 @@ class Doctors {
 class Appointments {
 
 }
-class Labs{
+public class Labs{
 
+    public Labs(String name, String processingTime, String specimen, String results, String assignedPersonnel) {
+    }
+
+    public void writeToFile(BufferedWriter bw) {
+    }
 }
 
 
