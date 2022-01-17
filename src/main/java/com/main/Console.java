@@ -25,6 +25,7 @@ public class Console {
 
     // These point to various files we will be using to write to output
 
+    // various uninitialized classes, initialized later
     Patient patient;
     Doctor doctor;
     Labs labs;
@@ -35,15 +36,11 @@ public class Console {
 
         System.out.println("Hello and welcome to Makini Hospital");
 
-
-        // cin;
         Scanner input = new Scanner(System.in);
-
 
         try {
             System.out.println("Choose one of the following \n1.) Console \n2.) GUI");
 
-            // cin>>choice;
             int choice = input.nextInt();
             Console console = new Console();
 
@@ -60,8 +57,8 @@ public class Console {
             }
 
         } catch (Exception e) {
-
-            e.printStackTrace();
+            LOGGER.error(e);
+            System.exit(1);
 
         }
 
@@ -92,7 +89,7 @@ public class Console {
                     this.pharmacyAnalysis();
                     this.finish();
                 } else {
-                    System.out.println("Hey you are not ill go home take some water");
+                    System.out.println("Hey you are not ill go home take some water\n\n");
                 }
                 break;
             }
@@ -208,6 +205,7 @@ public class Console {
 
         }
         System.out.println("Send patient to lab?");
+
         String decision = scanner.nextLine();
         // if decision starts with y assume doctor typed yes
         return decision.startsWith("y");
@@ -219,7 +217,11 @@ public class Console {
         System.out.println("==============================================");
 
         System.out.println("Medicine to be issued to patient "+ patient.name);
+        // some weird bug in the scanner where it would skip. this
+        scanner.nextLine();
+
         String medicine = scanner.nextLine();
+
 
         System.out.println("Price");
         String price = scanner.nextLine();

@@ -13,11 +13,14 @@ public class Labs implements FileIO<Labs>, DbInterface {
 
     public static final File LABS_FILE = new File("./labs.csv");
     private static final Logger LOGGER = LogManager.getLogger();
+
     public String assignedPersonnel;
+
     String name;
     String specimen;
     String results;
     String date;
+
     int personnelId;
     int cost;
 

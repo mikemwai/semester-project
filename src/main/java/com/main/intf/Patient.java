@@ -28,8 +28,6 @@ public class Patient implements FileIO<Patient>, DbInterface {
     Date reportTime;
 
     public Patient(String name, String dateOfBirth, String sickness, String assignedPersonnel) throws ParseException {
-        // Default constructor randomly initializes  patientID
-        // TODO: This will be changed once we have a cool way to create them
         Random rand = new Random();
 
         this.PatientID = Math.abs(rand.nextInt());

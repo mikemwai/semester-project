@@ -17,7 +17,7 @@ interface FileIO<T> {
 
     /**
      * A class extending this interface is expected to write csv values
-     * to argument @writer
+     * to a file
      * <p>
      * The method should also deal with formatting of the values in an
      * appropriate way and whatever quirks may come up.(E.g comas in names)
