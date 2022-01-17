@@ -1,5 +1,7 @@
 package com.main;
 import com.main.intf.Doctor;
+
+import com.main.intf.Labs;
 import com.main.intf.Patient;
 import com.main.intf.Pharmacy;
 import org.apache.logging.log4j.LogManager;
@@ -165,98 +167,78 @@ public class Console {
 
             System.exit(1);
         }
-        System.out.println("PHARMACY DEPARTMENT:");
 
-        System.out.println("PatientID");
-        String PatientID = scanner.nextLine();
 
-        System.out.println("Medicine");
-        String medicine = scanner.nextLine();
-
-        System.out.println("Price");
-        String price = scanner.nextLine();
-
-        try
-        {
-        // create the pharmacy class.
-        Pharmacy pharmacy = new Pharmacy(name, ailment, assignedPersonnel,PatientID,medicine,price);
-        // create the new file, if it doesn't exist.
-        // Probably only important for the first run
-        PHARMACY_FILE.createNewFile();
-
-        // Use a buffered writer because it's good practice.
-        // NO I WILL ALWAYS CODE CORRECTLY (LEAVE ME ALONE)
-        FileWriter fw = new FileWriter(PHARMACY_FILE,true);
-
-        BufferedWriter bw = new BufferedWriter(fw);
-        // done write details
-        pharmacy.writeToFile(bw);
-
-        // Print diagnostics
-        LOGGER.info("\n\nData for patient "+name+" written to "+PHARMACY_FILE.getAbsolutePath()+"\n\n");
-
-        // Tell the logger to inform me how things are going
-
-        }
-        catch (Exception e)
-        {
-        // if you fail, bail out, because I'm too lazy to handle
-        // this.
-        LOGGER.error(e);
-
-        System.exit(1);
-        }
     }
-    }
-    private void doctorsAnalysis(){
-        System.out.println("For Doctor's use only");
+    private void labResults() {
+
+        System.out.println("Please do not access.Personnel authorized only");
 
         System.out.println("Name");
         String name = scanner.nextLine();
 
-        System.out.println("Doctor_Id number:");
-        String Doctor_Id = String.valueOf(scanner.nextInt());
+        System.out.println("processing time dd-mm-yyyy");
 
-        System.out.println("Profession:");
-        String profession= scanner.nextLine();
+        String processingTime = scanner.nextLine();
 
-        System.out.println("Date");
-        String reportTime= scanner.nextLine();
+        System.out.println("specimen");
 
-        System.out.print("Analysis of the patient:");
-        String analysis = scanner.nextLine();
+        String specimen = scanner.nextLine();
+
+        System.out.println("results");
+        String results=scanner.nextLine();
+
+        System.out.println("cost");
+        int cost=scanner.nextInt();
+
+
+        String assignedPersonnel = assignRandomName();
+
+        System.out.println("Thank you for filling the details, you have been assigned to " + assignedPersonnel);
+        // Some good formatting.
+        System.out.println("\n\nDETAILS FOR PATIENT " + name);
+        System.out.println("____________________________________________");
+        System.out.println("NAME:\t\t\t" + name);
+        System.out.println("processingTime:\t" + processingTime);
+        System.out.println("specimen:\t\t"+specimen);
+        System.out.println("results:\t\t" + results);
+        System.out.println("The price is is:\t\t"+cost);
+        System.out.println("ASSIGNED TO:\t" + assignedPersonnel);
+        System.out.println("============================================");
+
+        try {
+
+            Labs labs = new Labs(name, processingTime,specimen, results, assignedPersonnel);
+
+
+            File Labs_FILE = null;
+            Labs_FILE.createNewFile();
+
+
+            FileWriter fw = new FileWriter(Labs_FILE,true);
+
+            BufferedWriter bw = new BufferedWriter(fw);
+            // done write details
+            labs.writeToFile(bw);
+
+
+            LOGGER.info("\n\nData for patient "+name+" written to "+Labs_FILE.getAbsolutePath()+"\n\n");
+
+
+            System.out.println("======================================================");
 
 
 
+        } catch (Exception e) {
+            LOGGER.error(e);
 
-
-        try{
-                Doctor doctor = new Doctor(name,profession,analysis,Doctor_Id,reportTime);
-
-                DOCTORS_FILE.createNewFile();
-
-                FileWriter fw = new FileWriter(DOCTORS_FILE,true );
-
-                BufferedWriter bw = new BufferedWriter(fw);
-
-                doctor.writeToFile(bw);
-
-                LOGGER.info("\n\nData for doctor"+name+profession+Doctor_Id+ " written to " + DOCTORS_FILE.getAbsolutePath() + "\n\n");
-
-                System.out.println("====================================================");
-            } catch(Exception e){
-                LOGGER.error(e);
-
-                System.exit(1);
-
-            }
+            System.exit(1);
         }
 
 
-
-
-
-     /*  Create random names for people
+    }
+    /*
+     *  Create random names for people
      * */
     String assignRandomName() {
         String[] names = {
