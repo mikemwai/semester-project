@@ -21,11 +21,11 @@ public class Pharmacy implements FileIO<Pharmacy>, DbInterface
     String name;
     String ailment;
     public  String assignedPersonnel;
-    String PatientID;
+    int PatientID;
     String medicine;
     String price;
 
-    public Pharmacy(String name, String ailment, String assignedPersonnel, String PatientID, String medicine,String price)
+    public Pharmacy(String name, String ailment, String assignedPersonnel, int PatientID, String medicine,String price)
     {
 
         this.ailment = ailment;
@@ -103,7 +103,7 @@ public class Pharmacy implements FileIO<Pharmacy>, DbInterface
         return new Pharmacy(fields[0],
                 fields[1],
                 fields[2],
-                fields[3],
+                Integer.parseInt(fields[3]),
                 fields[4],
                 fields[5]);
 

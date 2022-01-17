@@ -5,61 +5,52 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+public class Labs implements FileIO<Labs>, DbInterface {
 
-public class Labs implements FileIO<Labs>, DbInterface{
-
-    private static final Logger LOGGER=LogManager.getLogger();
-
-    public static final File LABS_FILE =   new File ("./labs.csv");
-
+    public static final File LABS_FILE = new File("./labs.csv");
+    private static final Logger LOGGER = LogManager.getLogger();
+    public String assignedPersonnel;
     String name;
     String specimen;
     String results;
-    public String assignedPersonnel;
+    String date;
     int personnelId;
-    Date processingTime;
     int cost;
 
-    public Labs(String name, String specimen, String assignedPersonnel, int cost, String results){
-        Random rand =new Random();
+    public Labs(String name, String specimen, String assignedPersonnel, String date, int cost, String results) {
+        Random rand = new Random();
 
-        this.personnelId=Math.abs(rand.nextInt());
-        this.name=name;
-        this.specimen=specimen;
-        this.results=results;
-        this.cost=cost;
-        this.assignedPersonnel=assignedPersonnel;
-
-        System.out.println("personnel"+name+"assigned Id"+this.personnelId);
+        this.personnelId = Math.abs(rand.nextInt());
+        this.name = name;
+        this.date = date;
+        this.specimen = specimen;
+        this.results = results;
+        this.cost = cost;
+        this.assignedPersonnel = assignedPersonnel;
 
     }
+
     @Override
-    public void writeToFile() throws IOException{
+    public void writeToFile() throws IOException {
+        boolean $ = LABS_FILE.createNewFile();
 
+        FileWriter fw = new FileWriter(LABS_FILE, true);
 
-            boolean $ = LABS_FILE.createNewFile();
+        BufferedWriter writer = new BufferedWriter(fw);
 
-            FileWriter fw = new FileWriter(LABS_FILE, true);
+        writer.write(String.format("%s,%s,%s,%s,%s", name, specimen, date, assignedPersonnel, cost));
 
-            BufferedWriter writer = new BufferedWriter(fw);
-
-            SimpleDateFormat dateFormat=new SimpleDateFormat("dd-MM-yyyy");
-
-            String results=dateFormat.format(processingTime);
-
-            writer.write(String.format("%s,%s,%s,%s,%s",name,specimen,results,assignedPersonnel,cost));
-
-            writer.flush();
+        writer.flush();
 
 
     }
 
     @Override
-    public List<Labs> readFromFile()throws FileNotFoundException {
+    public List<Labs> readFromFile() throws FileNotFoundException {
         BufferedReader reader = new BufferedReader(new FileReader(LABS_FILE));
 
         ArrayList<Labs> labsList = new ArrayList<>();
@@ -79,15 +70,17 @@ public class Labs implements FileIO<Labs>, DbInterface{
         }
         return labsList;
     }
-    private Labs parseFromFile(String data){
+
+    private Labs parseFromFile(String data) {
         // split into string
         String[] fields = data.split(",");
         return new Labs(
-               fields[0],
-               fields[1],
-               fields[2],
-               Integer.parseInt(fields[3]),
-               fields[4]
+                fields[0],
+                fields[1],
+                fields[2],
+                fields[3],
+                Integer.parseInt(fields[4]),
+                fields[5]
         );
 
     }

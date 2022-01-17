@@ -1,17 +1,17 @@
 package com.main;
-import com.main.intf.Doctor;
 
+import com.main.intf.Doctor;
 import com.main.intf.Labs;
 import com.main.intf.Patient;
 import com.main.intf.Pharmacy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Timer;
 
 /*
  * Console app
@@ -20,6 +20,7 @@ import java.util.Scanner;
 public class Console {
 
     private static final Scanner scanner = new Scanner(System.in);
+
     private static final Logger LOGGER = LogManager.getLogger();
 
     // These point to various files we will be using to write to output
@@ -80,10 +81,20 @@ public class Console {
             case 1: {
                 // registration, let's finally write code for that
                 this.startRegistration();
-                this.doctorsAnalysis();
-                this.labResults();
-                this.pharmacyAnalysis();
-                this.finish();
+                boolean cont = this.doctorsAnalysis();
+                // Java doesn't support switch case with boolean
+                // weird.
+                if (cont)
+                {
+                    System.out.println("Proceeding to lab\n\n");
+
+                    this.labResults();
+                    this.pharmacyAnalysis();
+                    this.finish();
+                } else {
+                    System.out.println("Hey you are not ill go home take some water");
+                }
+                break;
             }
 
             case 2: {
@@ -98,25 +109,18 @@ public class Console {
         }
     }
 
-    public void finish(){
-        System.out.println("Thank you "+patient.name +" for visiting us");
+    public void finish() {
+        System.out.println("Thank you " + patient.name + " for visiting us");
         System.out.println("We hope you had a good stay");
         System.out.println("For inquiries call 0710202010");
 
     }
+
     /*
-    * Start the registration process.
-    * */
+     * Start the registration process.
+     * */
     private void startRegistration() {
 
-        try {
-            // clear the screen.
-
-            // TODO: Change this to be Windows because presentation will probably be on windows,
-            Runtime.getRuntime().exec("clear");
-        } catch (Exception ignored) {
-            // Don't care id it fails.
-        }
         // Everything else.
         System.out.println("Welcome to registration :)\n" +
                 "We're glad you're here ");
@@ -151,11 +155,12 @@ public class Console {
 
             patient.writeToFile();
             // Print diagnostics
-            LOGGER.info("\n\nData for patient "+name+" written to "+ Patient.PATIENTS_FILE.getAbsolutePath()+"\n\n");
-
-            System.out.println("Wait for a few minutes to see the doctor.\nNurse "+ patient.assignedPersonnel+" will come pick you up");
+            System.out.println("Data for patient " + name + " written to " + Patient.PATIENTS_FILE.getAbsolutePath());
 
             System.out.println("======================================================");
+
+            System.out.println("Wait for a few minutes to see the doctor.\nNurse " + patient.assignedPersonnel + " will come pick you up");
+
 
         } catch (Exception e) {
             // if you fail, bail out, because I'm too lazy to handle
@@ -167,64 +172,67 @@ public class Console {
 
     }
 
-    private void doctorsAnalysis() {
+    private boolean doctorsAnalysis() {
+
+        System.out.println("====================================================");
+        System.out.println("DOCTOR ANALYSIS");
+        System.out.println("====================================================");
+
         System.out.println("For Doctor's use only");
 
-        System.out.println("Name");
-        String name = scanner.nextLine();
 
-        System.out.println("Doctor_Id number:");
-        String Doctor_Id = String.valueOf(scanner.nextInt());
-
-        System.out.println("Profession:");
+        System.out.println("Profession(of the doctor):");
         String profession = scanner.nextLine();
 
-        System.out.println("Date");
-        String reportTime = scanner.nextLine();
 
-        System.out.print("Analysis of the patient:");
+        System.out.println("Analysis of the patient:");
         String analysis = scanner.nextLine();
 
 
         try {
-            doctor = new Doctor(name, profession, analysis, Doctor_Id, reportTime);
+            doctor = new Doctor(profession,patient.PatientID, analysis);
+
+            System.out.println("You were handled by doctor "+ doctor.name);
 
             doctor.writeToFile();
 
-            LOGGER.info("\n\nData for doctor" + name + profession + Doctor_Id + " written to " + Doctor.DOCTORS_FILE.getAbsolutePath() + "\n\n");
+            System.out.println("Data for Doctor analysis of patient " + patient.name + " written to " + Doctor.DOCTORS_FILE.getAbsolutePath() + "\n");
 
-            System.out.println("====================================================");
-        } catch (Exception e) {
+            System.out.println("==================================================");
+
+        } catch (Exception e)
+        {
             LOGGER.error(e);
 
             System.exit(1);
 
         }
+        System.out.println("Send patient to lab?");
+        String decision = scanner.nextLine();
+        // if decision starts with y assume doctor typed yes
+        return decision.startsWith("y");
     }
-    private void pharmacyAnalysis(){
-        System.out.println("PHARMACY DEPARTMENT:");
 
-        System.out.println("PatientID");
-        String PatientID = scanner.nextLine();
+    private void pharmacyAnalysis() {
+        System.out.println("==============================================");
+        System.out.println("PHARMACY DEPARTMENT");
+        System.out.println("==============================================");
 
-        System.out.println("Medicine");
+        System.out.println("Medicine to be issued to patient "+ patient.name);
         String medicine = scanner.nextLine();
 
         System.out.println("Price");
         String price = scanner.nextLine();
 
-        try
-        {
+        try {
 
-            pharmacy = new Pharmacy(patient.name, patient.sickness, patient.assignedPersonnel,PatientID,medicine,price);
+            pharmacy = new Pharmacy(patient.name, patient.sickness, patient.assignedPersonnel, patient.PatientID, medicine, price);
 
             pharmacy.writeToFile();
 
-            LOGGER.info("\n\nData for patient "+patient.name+" written to "+Pharmacy.PHARMACY_FILE.getAbsolutePath()+"\n\n");
+            System.out.println("Medicine issued for patient " + patient.name + " backed up to " + Pharmacy.PHARMACY_FILE.getAbsolutePath() + "\n\n");
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
 
             LOGGER.error(e);
 
@@ -233,49 +241,50 @@ public class Console {
 
 
     }
+
     private void labResults() {
+        System.out.println("===========================================");
+        System.out.println("LAB ANALYSIS");
+        System.out.println("===========================================");
 
         System.out.println("Please do not access.Personnel authorized only");
 
-        System.out.println("Name");
 
-        String name = scanner.nextLine();
+        // get the current time
+        String processingTime = new SimpleDateFormat("hh:mm:ss   dd-MM-yyyy").format(new Date());
 
-        System.out.println("processing time dd-mm-yyyy");
 
-        String processingTime = scanner.nextLine();
-
-        System.out.println("specimen");
+        System.out.println("Specimen analysed");
 
         String specimen = scanner.nextLine();
 
-        System.out.println("results");
+        System.out.println("Results after analysing specimen");
+
         String results = scanner.nextLine();
 
-        System.out.println("cost");
+        System.out.println("Cost of analysis");
+
         int cost = scanner.nextInt();
 
-
         // Some good formatting.
-        System.out.println("\n\nDETAILS FOR PATIENT " + name);
+        System.out.println("\n\nDETAILS FOR PATIENT " + patient.name);
         System.out.println("____________________________________________");
-        System.out.println("NAME:\t\t\t" + name);
-        System.out.println("processingTime:\t" + processingTime);
-        System.out.println("specimen:\t\t" + specimen);
-        System.out.println("results:\t\t" + results);
-        System.out.println("The price is is:\t\t" + cost);
-        System.out.println("ASSIGNED TO:\t" + patient.assignedPersonnel);
+        System.out.println("NAME:\t\t\t" + patient.name);
+        System.out.println("Processed at:\t" + processingTime);
+        System.out.println("Specimen:\t\t" + specimen);
+        System.out.println("Results:\t\t" + results);
+        System.out.println("Cost:\t\t\t" + cost);
         System.out.println("============================================");
 
         try {
 
-            labs = new Labs(name, specimen,patient.assignedPersonnel,cost,results);
+            labs = new Labs(patient.name, specimen, patient.assignedPersonnel,processingTime, cost, results);
 
             labs.writeToFile();
 
-            LOGGER.info("\n\nData for patient " + name + " written to " + Labs.LABS_FILE.getAbsolutePath() + "\n\n");
+            System.out.println("Data for patient " + patient.name + " written to " + Labs.LABS_FILE.getAbsolutePath() + "\n\n");
 
-            System.out.println("======================================================");
+            System.out.println("==================================================");
 
 
         } catch (Exception e) {
@@ -283,8 +292,6 @@ public class Console {
 
             System.exit(1);
         }
-        System.exit(1);
-
     }
 
     /*
