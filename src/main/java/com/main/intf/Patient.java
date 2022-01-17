@@ -4,29 +4,28 @@ import com.main.db.Db;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
+import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.SimpleFormatter;
 
 public class Patient implements FileIO<Patient>, DbInterface {
 
     private static final Logger LOGGER = LogManager.getLogger();
+
+    public static final File PATIENTS_FILE = new File("./patients.csv");
+
     // String functions.
-    String name;
-    String sickness;
-    public  String assignedPersonnel;
+    public String name;
+    public String sickness;
+    public String assignedPersonnel;
+    public int PatientID;
     // Date and time functions
     Date dateOfBirth;
     Date reportTime;
-    int PatientID;
 
     public Patient(String name, String dateOfBirth, String sickness, String assignedPersonnel) throws ParseException {
         // Default constructor randomly initializes  patientID
@@ -35,7 +34,7 @@ public class Patient implements FileIO<Patient>, DbInterface {
 
         this.PatientID = Math.abs(rand.nextInt());
 
-        System.out.println("Patient "+name+" assigned ID "+ this.PatientID);
+        System.out.println("Patient " + name + " assigned ID " + this.PatientID);
 
         System.out.println("===========================================\n\n");
 
@@ -43,7 +42,7 @@ public class Patient implements FileIO<Patient>, DbInterface {
 
         this.name = name;
 
-        this.reportTime = new  Date();
+        this.reportTime = new Date();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
@@ -56,28 +55,33 @@ public class Patient implements FileIO<Patient>, DbInterface {
 
 
     @Override
-    public void writeToFile(BufferedWriter writer) {
-        try {
-            // format date to something easy to parse
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    public void writeToFile() throws IOException {
 
-            String dob=dateFormat.format(dateOfBirth);
+        // just assign, shuts up static analysis
+        boolean $ = PATIENTS_FILE.createNewFile();
 
-            String report = dateFormat.format(reportTime);
-            // Finally, write to the file.
-            writer.write(String.format("%s,%s,%s,%s,%s,%s\n", name, dob, sickness, assignedPersonnel, report, PatientID));
-            writer.flush();
+        FileWriter fw = new FileWriter(PATIENTS_FILE, true);
 
-        } catch (IOException e) {
-            // Exit process.
-            LOGGER.error(e);
+        BufferedWriter writer = new BufferedWriter(fw);
+        // format date to something easy to parse
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
-            System.exit(1);
-        }
+        String dob = dateFormat.format(dateOfBirth);
+
+        String report = dateFormat.format(reportTime);
+        // Finally, write to the file.
+        writer.write(String.format("%s,%s,%s,%s,%s,%s\n", name, dob, sickness, assignedPersonnel, report, PatientID));
+
+        writer.flush();
+
+
     }
 
     @Override
-    public List<Patient> readFromFile(BufferedReader reader) {
+    public List<Patient> readFromFile() throws FileNotFoundException {
+
+        // read from our file
+        BufferedReader reader = new BufferedReader(new FileReader(PATIENTS_FILE));
         /*
          * This does two things, it reads a file contents pointed by reader and
          * in this file it reads contents line by line. (Because the write function does
@@ -88,13 +92,11 @@ public class Patient implements FileIO<Patient>, DbInterface {
             String line;
 
             // read data line by line updating patientsList
-            while ((line = reader.readLine()) != null)
-            {
+            while ((line = reader.readLine()) != null) {
                 patientList.add(this.parseFromFile(line));
             }
 
-        } catch (IOException | ParseException e)
-        {
+        } catch (IOException | ParseException e) {
             // Exit process.
             LOGGER.error(e);
 

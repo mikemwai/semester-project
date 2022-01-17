@@ -1,19 +1,10 @@
 package com.main.intf;
-
 import com.main.db.Db;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 /*
  * An interface implementing Input output.
@@ -30,11 +21,12 @@ interface FileIO<T> {
      * <p>
      * The method should also deal with formatting of the values in an
      * appropriate way and whatever quirks may come up.(E.g comas in names)
+     *: The location we are writing to
      *
-     * @param writer: The location we are writing to
-     * @throws IOException
+     * @throws IOException: An exception occuring when something goes
+     * wrong in the IO stack
      */
-    void writeToFile(BufferedWriter writer) throws IOException;
+    void writeToFile() throws IOException;
 
 
     /**
@@ -44,9 +36,9 @@ interface FileIO<T> {
      * This method should also deal with any errors that may arise from
      * IO operations, e.g. opening of binary files, or malformed CSV's
      *
-     * @param reader: The file we are reading from
+     * @throws FileNotFoundException: The exception occuring when a file isn't found
      */
-    List<T> readFromFile(BufferedReader reader);
+    List<T> readFromFile() throws FileNotFoundException;
 }
 
 interface DbInterface {
@@ -55,32 +47,3 @@ interface DbInterface {
     void readFromDb(Db db);
 }
 
-class Doctors {
-    String Name;
-    int Doctor_Id;
-    String Profession;
-}
-
-class Appointments {
-
-}
-public class Labs{
-
-    public Labs(String name, String processingTime, String specimen, String results, String assignedPersonnel) {
-    }
-
-    public void writeToFile(BufferedWriter bw) {
-    }
-}
-
-
-
-
-
-class Pharmacy {
-
-}
-
-class Office {
-
-}

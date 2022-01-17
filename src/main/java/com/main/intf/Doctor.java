@@ -4,9 +4,7 @@ import com.main.db.Db;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
+import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,13 +14,19 @@ import java.util.Random;
 
 
 public class Doctor implements FileIO<Doctor>, DbInterface{
+
     private static final Logger LOGGER = LogManager.getLogger();
 
+    public static final File DOCTORS_FILE = new File("./doctors.csv");
+
     String name;
+
     String profession;
 
     String Doctor_Id;
+
     Date reportTime;
+
     public Doctor(String name, String profession, int Doctor_Id) {
         Random rand = new Random();
         this.Doctor_Id = String.valueOf(Math.abs(rand.nextInt()));
@@ -41,25 +45,34 @@ public class Doctor implements FileIO<Doctor>, DbInterface{
     }
 
     @Override
-    public void writeToFile(BufferedWriter writer){
-        try{
+    public void writeToFile() throws  IOException{
+
+            boolean $ = DOCTORS_FILE.createNewFile();
+
+            FileWriter fw = new FileWriter(DOCTORS_FILE, true);
+
+            BufferedWriter writer = new BufferedWriter(fw);
+
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
+
             String report = dateFormat.format(reportTime);
 
             writer.write(String.format(name, profession, reportTime,Doctor_Id));
+
             writer.flush();
 
-        } catch (IOException e){
-            LOGGER.error(e);
-            System.exit(1);
-        }
+
     }
 
     @Override
-    public List<Doctor> readFromFile(BufferedReader reader){
+    public List<Doctor> readFromFile()throws FileNotFoundException{
+
+        BufferedReader reader = new BufferedReader(new FileReader(DOCTORS_FILE));
+
         ArrayList<Doctor> doctorList = new ArrayList<>();
         try{
             String line;
+
             while((line = reader.readLine()) != null)
             {doctorList.add(this.parseFromFile(line));
         }

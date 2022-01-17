@@ -21,11 +21,13 @@ public class Console {
 
     private static final Scanner scanner = new Scanner(System.in);
     private static final Logger LOGGER = LogManager.getLogger();
-    // This points to the patients file where we will
-    // be writing data regarding new patients.
-    private static final  File PATIENTS_FILE = new File("./patients.csv");
-    private static final  File PHARMACY_FILE = new File("./pharmacy.csv");
-    private static final File DOCTORS_FILE = new File("./doctors.csv");
+
+    // These point to various files we will be using to write to output
+
+    Patient patient;
+    Doctor doctor;
+    Labs labs;
+    Pharmacy pharmacy;
 
 
     public static void main(String[] args) {
@@ -78,7 +80,10 @@ public class Console {
             case 1: {
                 // registration, let's finally write code for that
                 this.startRegistration();
-
+                this.doctorsAnalysis();
+                this.labResults();
+                this.pharmacyAnalysis();
+                this.finish();
             }
 
             case 2: {
@@ -93,6 +98,12 @@ public class Console {
         }
     }
 
+    public void finish(){
+        System.out.println("Thank you "+patient.name +" for visiting us");
+        System.out.println("We hope you had a good stay");
+        System.out.println("For inquiries call 0710202010");
+
+    }
     /*
     * Start the registration process.
     * */
@@ -122,7 +133,7 @@ public class Console {
 
         String ailment = scanner.nextLine();
 
-        String assignedPersonnel = assignRandomName();
+        String assignedPersonnel = assignRandomPersonnelName();
 
         System.out.println("Thank you for filling the details, you have been assigned to " + assignedPersonnel);
         // Some good formatting.
@@ -136,33 +147,85 @@ public class Console {
 
         try {
             // create the patient class.
-            Patient patient = new Patient(name, dob, ailment, assignedPersonnel);
+            patient = new Patient(name, dob, ailment, assignedPersonnel);
 
-            // create the new file, if it doesn't exist.
-            // Probably only important for the first run
-            PATIENTS_FILE.createNewFile();
-
-            // Use a buffered writer because it's good practice.
-            // NO I WILL ALWAYS CODE CORRECTLY (LEAVE ME ALONE)
-            FileWriter fw = new FileWriter(PATIENTS_FILE,true);
-
-            BufferedWriter bw = new BufferedWriter(fw);
-            // done write details
-            patient.writeToFile(bw);
-
+            patient.writeToFile();
             // Print diagnostics
-            LOGGER.info("\n\nData for patient "+name+" written to "+PATIENTS_FILE.getAbsolutePath()+"\n\n");
+            LOGGER.info("\n\nData for patient "+name+" written to "+ Patient.PATIENTS_FILE.getAbsolutePath()+"\n\n");
 
             System.out.println("Wait for a few minutes to see the doctor.\nNurse "+ patient.assignedPersonnel+" will come pick you up");
 
             System.out.println("======================================================");
 
-            // Tell the logger to inform me how things are going
-
-
         } catch (Exception e) {
             // if you fail, bail out, because I'm too lazy to handle
             // this.
+            LOGGER.error(e);
+
+            System.exit(1);
+        }
+
+    }
+
+    private void doctorsAnalysis() {
+        System.out.println("For Doctor's use only");
+
+        System.out.println("Name");
+        String name = scanner.nextLine();
+
+        System.out.println("Doctor_Id number:");
+        String Doctor_Id = String.valueOf(scanner.nextInt());
+
+        System.out.println("Profession:");
+        String profession = scanner.nextLine();
+
+        System.out.println("Date");
+        String reportTime = scanner.nextLine();
+
+        System.out.print("Analysis of the patient:");
+        String analysis = scanner.nextLine();
+
+
+        try {
+            doctor = new Doctor(name, profession, analysis, Doctor_Id, reportTime);
+
+            doctor.writeToFile();
+
+            LOGGER.info("\n\nData for doctor" + name + profession + Doctor_Id + " written to " + Doctor.DOCTORS_FILE.getAbsolutePath() + "\n\n");
+
+            System.out.println("====================================================");
+        } catch (Exception e) {
+            LOGGER.error(e);
+
+            System.exit(1);
+
+        }
+    }
+    private void pharmacyAnalysis(){
+        System.out.println("PHARMACY DEPARTMENT:");
+
+        System.out.println("PatientID");
+        String PatientID = scanner.nextLine();
+
+        System.out.println("Medicine");
+        String medicine = scanner.nextLine();
+
+        System.out.println("Price");
+        String price = scanner.nextLine();
+
+        try
+        {
+
+            pharmacy = new Pharmacy(patient.name, patient.sickness, patient.assignedPersonnel,PatientID,medicine,price);
+
+            pharmacy.writeToFile();
+
+            LOGGER.info("\n\nData for patient "+patient.name+" written to "+Pharmacy.PHARMACY_FILE.getAbsolutePath()+"\n\n");
+
+        }
+        catch (Exception e)
+        {
+
             LOGGER.error(e);
 
             System.exit(1);
@@ -175,6 +238,7 @@ public class Console {
         System.out.println("Please do not access.Personnel authorized only");
 
         System.out.println("Name");
+
         String name = scanner.nextLine();
 
         System.out.println("processing time dd-mm-yyyy");
@@ -186,47 +250,32 @@ public class Console {
         String specimen = scanner.nextLine();
 
         System.out.println("results");
-        String results=scanner.nextLine();
+        String results = scanner.nextLine();
 
         System.out.println("cost");
-        int cost=scanner.nextInt();
+        int cost = scanner.nextInt();
 
 
-        String assignedPersonnel = assignRandomName();
-
-        System.out.println("Thank you for filling the details, you have been assigned to " + assignedPersonnel);
         // Some good formatting.
         System.out.println("\n\nDETAILS FOR PATIENT " + name);
         System.out.println("____________________________________________");
         System.out.println("NAME:\t\t\t" + name);
         System.out.println("processingTime:\t" + processingTime);
-        System.out.println("specimen:\t\t"+specimen);
+        System.out.println("specimen:\t\t" + specimen);
         System.out.println("results:\t\t" + results);
-        System.out.println("The price is is:\t\t"+cost);
-        System.out.println("ASSIGNED TO:\t" + assignedPersonnel);
+        System.out.println("The price is is:\t\t" + cost);
+        System.out.println("ASSIGNED TO:\t" + patient.assignedPersonnel);
         System.out.println("============================================");
 
         try {
 
-            Labs labs = new Labs(name, processingTime,specimen, results, assignedPersonnel);
+            labs = new Labs(name, specimen,patient.assignedPersonnel,cost,results);
 
+            labs.writeToFile();
 
-            File Labs_FILE = null;
-            Labs_FILE.createNewFile();
-
-
-            FileWriter fw = new FileWriter(Labs_FILE,true);
-
-            BufferedWriter bw = new BufferedWriter(fw);
-            // done write details
-            labs.writeToFile(bw);
-
-
-            LOGGER.info("\n\nData for patient "+name+" written to "+Labs_FILE.getAbsolutePath()+"\n\n");
-
+            LOGGER.info("\n\nData for patient " + name + " written to " + Labs.LABS_FILE.getAbsolutePath() + "\n\n");
 
             System.out.println("======================================================");
-
 
 
         } catch (Exception e) {
@@ -234,13 +283,14 @@ public class Console {
 
             System.exit(1);
         }
-
+        System.exit(1);
 
     }
+
     /*
      *  Create random names for people
      * */
-    String assignRandomName() {
+    String assignRandomPersonnelName() {
         String[] names = {
                 "Leslie Barnett", "Devyn Wood", "Itzel Simpson", "Braiden Chandler",
                 "Caitlin Berry", "Neveah Brady", "Araceli Garrett", "Kaylen Wu", "Adriana Summers",

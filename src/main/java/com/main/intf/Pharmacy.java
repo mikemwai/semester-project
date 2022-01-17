@@ -4,9 +4,7 @@ import com.main.db.Db;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
+import java.io.*;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +14,9 @@ public class Pharmacy implements FileIO<Pharmacy>, DbInterface
 {
 
     private static final Logger LOGGER = LogManager.getLogger();
+
+    public  static final File PHARMACY_FILE = new File("./pharmacy.csv");
+
     // String functions.
     String name;
     String ailment;
@@ -44,26 +45,27 @@ public class Pharmacy implements FileIO<Pharmacy>, DbInterface
 
 
     @Override
-    public void writeToFile(BufferedWriter writer)
+    public void writeToFile() throws IOException
     {
-        try
-        {
+
+            boolean $ = PHARMACY_FILE.createNewFile();
+
+            FileWriter fw = new FileWriter(PHARMACY_FILE, true);
+
+            BufferedWriter writer = new BufferedWriter(fw);
 
             // Finally, write to the file.
             writer.write(String.format("%s,%s,%s,%s,%s,%s\n", name, ailment, assignedPersonnel,PatientID,medicine,price));
             writer.flush();
 
-        } catch (IOException e) {
-            // Exit process.
-            LOGGER.error(e);
 
-            System.exit(1);
-        }
     }
 
     @Override
-    public List<Pharmacy> readFromFile(BufferedReader reader)
+    public List<Pharmacy> readFromFile() throws FileNotFoundException
     {
+
+        BufferedReader reader = new BufferedReader(new FileReader(PHARMACY_FILE));
         /*
          * This does two things, it reads a file contents pointed by reader and
          * in this file it reads contents line by line. (Because the write function does
