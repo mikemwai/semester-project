@@ -52,7 +52,7 @@ public class Doctor implements FileIO<Doctor>, DbInterface {
 
 
 
-        writer.write(String.format("%s,%s,%s,%s",patientId,diagnosis,name,profession));
+        writer.write(String.format("%s,%s,%s,%s\n",patientId,diagnosis,name,profession));
 
         writer.flush();
 

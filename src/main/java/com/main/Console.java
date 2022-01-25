@@ -7,11 +7,11 @@ import com.main.intf.Pharmacy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.Timer;
+import java.util.*;
 
 /*
  * Console app
@@ -95,7 +95,7 @@ public class Console {
             }
 
             case 2: {
-                System.out.println("Still under Construction!");
+                this.adminConsole();
                 break;
             }
 
@@ -106,7 +106,62 @@ public class Console {
         }
     }
 
-    public void finish() {
+    private  void adminConsole(){
+        System.out.println("======================================");
+        System.out.println("ADMIN USE ONLY");
+
+        String password = "SECURE";
+
+        System.out.println("Enter password");
+
+        String[] fileList = {"./doctors.csv","./labs.csv","./patients.csv","./pharmacy.csv"};
+
+        String enteredPassword = scanner.nextLine();
+        // String values are not compared with equals? null unsafety?
+        // Refactored by the IDE.
+        if (Objects.equals(enteredPassword, password)){
+            System.out.println("Welcome Admin.");
+            System.out.println("Enter file to view");
+            System.out.println("1.)Doctors\n2.)Lab Reports\n3.)Patients\n4.)Pharmacy");
+            int choice = scanner.nextInt();
+            switch (choice){
+                case 1: case 2:
+                case 3: case 4:
+                    readFile(fileList[choice-1]);
+                    break;
+                default:
+                    System.out.println("Invalid number, exiting");
+            }
+
+
+        } else{
+            System.out.println("Not admin,exiting");
+            System.exit(1);
+        }
+
+    }
+    private void readFile(String name)  {
+        try {
+
+
+        BufferedReader in = new BufferedReader(new FileReader(name));
+
+        System.out.println("==============================================");
+        System.out.println("File "+name);
+        System.out.println("==============================================");
+        String line;
+        while((line = in.readLine()) != null)
+        {
+            System.out.println(line);
+        }
+        in.close();
+        }catch (Exception e){
+            LOGGER.error(e);
+            System.exit(1);
+        }
+
+    }
+    private void finish() {
         System.out.println("Thank you " + patient.name + " for visiting us");
         System.out.println("We hope you had a good stay");
         System.out.println("For inquiries call 0710202010");

@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-public class Patient implements FileIO<Patient>, DbInterface {
+public class Patient  implements FileIO<Patient>, DbInterface  {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -67,6 +67,7 @@ public class Patient implements FileIO<Patient>, DbInterface {
         String dob = dateFormat.format(dateOfBirth);
 
         String report = dateFormat.format(reportTime);
+
         // Finally, write to the file.
         writer.write(String.format("%s,%s,%s,%s,%s,%s\n", name, dob, sickness, assignedPersonnel, report, PatientID));
 

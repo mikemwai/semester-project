@@ -45,7 +45,7 @@ public class Labs implements FileIO<Labs>, DbInterface {
 
         BufferedWriter writer = new BufferedWriter(fw);
 
-        writer.write(String.format("%s,%s,%s,%s,%s", name, specimen, date, assignedPersonnel, cost));
+        writer.write(String.format("%s,%s,%s,%s,%s\n", name, specimen, date, assignedPersonnel, cost));
 
         writer.flush();
 
