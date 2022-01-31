@@ -20,7 +20,8 @@ import java.sql.*;
 
 
 public class Db {
-    //  Initialize the database for the first run
+    //initialize the database for the first run
+
 
 
     // local static declarations to prevent pollution of the global space
@@ -29,9 +30,13 @@ public class Db {
     // TODO: @ First meeting , we should do a database layout so that these can be filled.
 
     // @ Precious fix this to be correct statements, its throwing errors.
-    static String MainHospitalDbFormat = "CREATE TABLE IF NOT EXISTS Hospital (name TEXT)";
+    static String DoctorDbFormat= "CREATE TABLE \"Doctor\" ( \"name\" TEXT NOT NULL, \"Patient_ID\" INTEGER NOT NULL, \"profession\" TEXT NOT NULL, \"diagnosis\" TEXT NOT NULL, PRIMARY KEY(\"name\"),FOREIGN KEY (\"Patient_ID\") REFERENCES Patients (Patient_ID), Pharmacy (Patient_ID)";
 
-    static String PatientsDbFormat = "CREATE TABLE IF NOT EXISTS Patients (name TEXT)";
+    static String PatientsDbFormat = "CREATE TABLE \"Patient\" ( \"patient_ID\" INTEGER NOT NULL, \"name\" TEXT NOT NULL, \"dateOfBirth\" DATE NOT NULL, \"reportTime\" DATE NOT NULL, \"sickness\" TEXT NOT NULL, \"assignedPersonnel\" TEXT NOT NULL, PRIMARY KEY(\"patient_ID\") FOREIGN KEY (\"assignedPersonnel\") REFERENCES Pharmacy (assignedPersonnel), Lab (assignedPersonnel), Doctor(assignedPersonnel)  )";
+
+    static String LabsDbFormat = "CREATE TABLE \"Labs\" ( \"name\" TEXT NOT NULL, \"specimen\" TEXT NOT NULL, \"results\" TEXT NOT NULL, \"date\" DATE NOT NULL, \"personnelId\" INTEGER NOT NULL, \"cost\" FLOAT NOT NULL, \"assignedPersonnel\" TEXT NOT NULL, PRIMARY KEY(\"personnelId\"), FOREIGN KEY (\"assignedPersonnel\") REFERENCES Pharmacy(assignedPersonnel), Doctor(assignedPersonnel),)";
+
+    static String PharmacyDbFormat = "CREATE TABLE \"Pharmacy\" ( \"name\" TEXT NOT NULL, \"ailment\" TEXT NOT NULL, \"assignedPersonnel\" TEXT NOT NULL, \"patient_ID\" INTEGER NOT NULL, \"medicine\" INTEGER NOT NULL, \"price\" FLOAT NOT NULL, PRIMARY KEY(\"patient_ID\"), FOREIGN KEY (\"patient_ID\") REFERENCES Doctor(Patient_ID), Patients(Patient_ID)";
 
     // connection to the database.
     static Connection conn;
@@ -48,7 +53,7 @@ public class Db {
     *
     * 1. Connects to a database instance(configured in  the private String keyword
     *
-    * 2. Creates tables (if not created)
+    * 2. Create tables (if not created)
     * */
 
     public Db() throws SQLException {
@@ -84,9 +89,15 @@ public class Db {
         // execute the database statements.
 
         try {
-            stmt.execute(MainHospitalDbFormat);
-
             stmt.execute(PatientsDbFormat);
+            stmt.execute(LabsDbFormat);
+            stmt.execute(PharmacyDbFormat);
+            stmt.execute(DoctorDbFormat);
+                 stmt.execute("insert into Patients values(");
+            stmt.execute("insert into Labs values(");
+            stmt.execute("insert into Pharmacy values(");
+            stmt.execute("insert into Doctor values(");
+
         } catch (SQLException e){
             // log the error.
             LOGGER.error(e);
