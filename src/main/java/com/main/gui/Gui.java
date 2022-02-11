@@ -110,8 +110,6 @@ public class Gui implements ActionListener {
         panel.add(enterButton);
 
 
-
-
         {;;
           frame=new JFrame("PERSONNEL VIEW");
           frame.dispose();
