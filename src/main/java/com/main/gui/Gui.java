@@ -11,6 +11,7 @@
 package com.main.gui;
 // GUI handles
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Objects;
@@ -22,12 +23,19 @@ import java.util.Objects;
 *  */
 public class Gui implements ActionListener {
 
+    public static JDesktopPane desk;
+    static JInternalFrame frame1;
+    static JInternalFrame frame2;
+    static JInternalFrame frame3;
+    static JInternalFrame frame4;
+
     private static  JFrame frame;
 
     private static  String username;
     private static String password;
 
-    public static void main(String[] args) {
+   public  static void main (String [] args){
+
         frame=new JFrame("MAKINI HOSPITAL");//creating instance of JFrame
 
         frame.setSize(500,600);
@@ -35,10 +43,10 @@ public class Gui implements ActionListener {
 
         JPanel panel =new JPanel();
         frame.add(panel);
-
         placeComponents(panel);
         frame.setVisible(true);
 
+        Gui d=new Gui();
 
     }
 
@@ -95,9 +103,42 @@ public class Gui implements ActionListener {
                 else{
                     welcome.setText("WE DON'T KNOW YOU");
                 }
+                frame.dispose();
+
             }
         });
         panel.add(enterButton);
+
+
+
+
+        {;;
+          frame=new JFrame("PERSONNEL VIEW");
+          frame.dispose();
+          desk=new JDesktopPane();
+          frame1=new JInternalFrame("frame1",true,true,true,true);
+          frame1.setBounds(20,200,150,100);
+          frame1.setVisible(true);
+
+            frame2=new JInternalFrame("frame1",true,true,true,true);
+            frame2.setBounds(20,200,150,100);
+            frame2.setVisible(true);
+
+            frame3=new JInternalFrame("frame1",true,true,true,true);
+            frame3.setBounds(20,200,150,100);
+            frame3.setVisible(true);
+
+            frame4=new JInternalFrame("frame1",true,true,true,true);
+            frame4.setBounds(20,200,150,100);
+            frame4.setVisible(true);
+
+            desk.add(frame1);
+            desk.add(frame2);
+            desk.add(frame3);
+            desk.add(frame4);
+            frame.setSize(400,500);
+            frame.setVisible(true);
+        }
 
 
 
