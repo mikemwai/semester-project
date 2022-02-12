@@ -121,4 +121,14 @@ public class Pharmacy implements FileIO<Pharmacy>, DbInterface
     {
 
     }
+
+    @Override
+    public void writeToFile(BufferedWriter writer) throws IOException {
+
+    }
+
+    @Override
+    public List<Patient> readFromFile(BufferedReader reader) {
+        return null;
+    }
 }

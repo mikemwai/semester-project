@@ -34,9 +34,10 @@ public class Db {
 
     // @ Precious fix this to be correct statements, its throwing errors.
     // VARCHAR(100)
-    static String DoctorDbFormat = "CREATE TABLE \"Doctor\" ( \"name\" TEXT NOT NULL, \"Patient_ID\" INTEGER NOT NULL, \"profession\" TEXT NOT NULL, \"diagnosis\" TEXT NOT NULL, PRIMARY KEY(\"name\"),FOREIGN KEY (\"Patient_ID\") REFERENCES Patients (Patient_ID), Pharmacy (Patient_ID)";
+    //static String DoctorDbFormat = "CREATE TABLE \"Doctor\" ( \"name\" TEXT NOT NULL, \"Patient_ID\" INTEGER NOT NULL, \"profession\" TEXT NOT NULL, \"diagnosis\" TEXT NOT NULL, PRIMARY KEY(\"name\"),FOREIGN KEY (\"Patient_ID\") REFERENCES Patients (Patient_ID), Pharmacy (Patient_ID)";
+    static String DoctorDbFormat = "CREATE TABLE \"Doctor\" ( \"name\" TEXT NOT NULL, \"Patient_ID\" INTEGER NOT NULL, \"profession\" TEXT NOT NULL, \"diagnosis\" TEXT NOT NULL, PRIMARY KEY(\"name\")";
 
-    static String PatientsDbFormat = "CREATE TABLE \"Patient\" ( \"patient_ID\" INTEGER NOT NULL, \"name\" TEXT NOT NULL, \"dateOfBirth\" DATE NOT NULL, \"reportTime\" DATE NOT NULL, \"sickness\" TEXT NOT NULL, \"assignedPersonnel\" TEXT NOT NULL, PRIMARY KEY(\"patient_ID\") FOREIGN KEY (\"assignedPersonnel\") REFERENCES Pharmacy (assignedPersonnel), Lab (assignedPersonnel), Doctor(assignedPersonnel)  )";
+    static String PatientsDbFormat = "CREATE TABLE \"Patient\" ( \"patient_ID\" INTEGER NOT NULL, \"name\" TEXT NOT NULL, \"dateOfBirth\" DATE NOT NULL, \"reportTime\" DATE NOT NULL, \"sickness\" TEXT NOT NULL, \"assignedPersonnel\" TEXT NOT NULL, PRIMARY KEY(\"patient_ID\") FOREIGN KEY (\"assignedPersonnel\") REFERENCES Pharmacy (assignedPersonnel), Labs (assignedPersonnel), Doctor(assignedPersonnel)  )";
 
     static String LabsDbFormat = "CREATE TABLE \"Labs\" ( \"name\" TEXT NOT NULL, \"specimen\" TEXT NOT NULL, \"results\" TEXT NOT NULL, \"date\" DATE NOT NULL, \"personnelId\" INTEGER NOT NULL, \"cost\" FLOAT NOT NULL, \"assignedPersonnel\" TEXT NOT NULL, PRIMARY KEY(\"personnelId\"), FOREIGN KEY (\"assignedPersonnel\") REFERENCES Pharmacy(assignedPersonnel), Doctor(assignedPersonnel),)";
 
@@ -156,36 +157,69 @@ public class Db {
         stmt.execute(db_stmt);
     }
 
-    public void selectPatient(Patient patient) throws SQLException{
+    public void selectPatient(Patient patient) throws SQLException {
         ////"CREATE TABLE \"Patient\" ( \"patient_ID\" INTEGER NOT NULL, \"name\" TEXT NOT NULL, \"dateOfBirth\" DATE NOT NULL, \"reportTime\" DATE NOT NULL, \"sickness\" TEXT NOT NULL, \"assignedPersonnel\" TEXT NOT NULL, PRIMARY KEY(\"patient_ID\") FOREIGN KEY (\"assignedPersonnel\") REFERENCES Pharmacy (assignedPersonnel), Lab (assignedPersonnel), Doctor(assignedPersonnel)  )";
-        String db_stmt="SELECT * FROM PATIENTS WHERE name="+patient.name+"|| dateOfBirth="+patient.dateOfBirth+"|| patient_ID="+patient.PatientID+"|| reportTime="+patient.reportTime+"|| sickness="+patient.sickness+"|| assignedPersonnel="+patient.assignedPersonnel+");";
+        String db_stmt = "SELECT * FROM PATIENTS WHERE name=" + patient.name + "|| dateOfBirth=" + patient.dateOfBirth + "|| patient_ID=" + patient.PatientID + "|| reportTime=" + patient.reportTime + "|| sickness=" + patient.sickness + "|| assignedPersonnel=" + patient.assignedPersonnel + ");";
         Statement stmt = conn.createStatement();
 
         stmt.execute(db_stmt);
     }
 
-    public void selectPharmacy(Pharmacy pharmacy) throws SQLException{
+    public void selectPharmacy(Pharmacy pharmacy) throws SQLException {
         //"CREATE TABLE \"Pharmacy\" ( \"name\" TEXT NOT NULL, \"ailment\" TEXT NOT NULL, \"assignedPersonnel\" TEXT NOT NULL, \"patientID\" INTEGER NOT NULL, \"medicine\" INTEGER NOT NULL, \"price\" FLOAT NOT NULL, PRIMARY KEY(\"patient_ID\"), FOREIGN KEY (\"patient_ID\") REFERENCES Doctor(Patient_ID), Patients(Patient_ID)";
-        String db_stmt="SELECT * FROM PHARMACY WHERE name="+pharmacy.name+"|| ailment="+pharmacy.ailment+"|| patient_D="+pharmacy.PatientID+"|| medicine="+pharmacy.medicine+"|| price="+pharmacy.price+");";
+        String db_stmt = "SELECT * FROM PHARMACY WHERE name=" + pharmacy.name + "|| ailment=" + pharmacy.ailment + "|| patient_D=" + pharmacy.PatientID + "|| medicine=" + pharmacy.medicine + "|| price=" + pharmacy.price + ");";
         Statement stmt = conn.createStatement();
 
         stmt.execute(db_stmt);
     }
 
-    public void selectDoctor(Doctor doctor) throws SQLException{
+    public void selectDoctor(Doctor doctor) throws SQLException {
         //"CREATE TABLE \"Doctor\" ( \"name\" TEXT NOT NULL, \"Patient_ID\" INTEGER NOT NULL, \"profession\" TEXT NOT NULL, \"diagnosis\" TEXT NOT NULL, PRIMARY KEY(\"name\"),FOREIGN KEY (\"Patient_ID\") REFERENCES Patients (Patient_ID), Pharmacy (Patient_ID)";
-        String db_stmt="SELECT * FROM DOCTOR WHERE name="+doctor.name+"|| profession="+doctor.profession+"|| patient_ID="+doctor.patientId+"|| diagnosis="+doctor.diagnosis+");";
+        String db_stmt = "SELECT * FROM DOCTOR WHERE name=" + doctor.name + "|| profession=" + doctor.profession + "|| patient_ID=" + doctor.patientId + "|| diagnosis=" + doctor.diagnosis + ");";
         Statement stmt = conn.createStatement();
 
         stmt.execute(db_stmt);
     }
 
 
-    public void selectLabs(Labs labs) throws SQLException{
+    public void selectLabs(Labs labs) throws SQLException {
         //"CREATE TABLE \"Labs\" ( \"name\" TEXT NOT NULL, \"specimen\" TEXT NOT NULL, \"results\" TEXT NOT NULL, \"date\" DATE NOT NULL, \"personnelId\" INTEGER NOT NULL, \"cost\" FLOAT NOT NULL, \"assignedPersonnel\" TEXT NOT NULL, PRIMARY KEY(\"personnelId\"), FOREIGN KEY (\"assignedPersonnel\") REFERENCES Pharmacy(assignedPersonnel), Doctor(assignedPersonnel),)";
-        String db_stmt="SELECT * FROM LABS WHERE name="+labs.name+"|| specimen="+labs.specimen+"|| results="+ labs.results+"|| date="+labs.date+"|| personnelId="+labs.personnelId+"|| assignedPersonnel="+labs.assignedPersonnel+"|| cost="+labs.cost+");";
+        String db_stmt = "SELECT * FROM LABS WHERE name=" + labs.name + "|| specimen=" + labs.specimen + "|| results=" + labs.results + "|| date=" + labs.date + "|| personnelId=" + labs.personnelId + "|| assignedPersonnel=" + labs.assignedPersonnel + "|| cost=" + labs.cost + ");";
         Statement stmt = conn.createStatement();
 
         stmt.execute(db_stmt);
     }
+
+    public void deleteDoctor(Doctor doctor) throws SQLException{
+
+    String db_stmt = "DROP TABLE DOCTOR";
+    Statement stmt = conn.createStatement();
+
+        stmt.execute(db_stmt);
+}
+
+    public void deleteLabs(Labs labs) throws SQLException{
+
+        String db_stmt = "DROP TABLE LABS";
+        Statement stmt = conn.createStatement();
+
+        stmt.execute(db_stmt);
+    }
+    public void deletePharmacy(Pharmacy pharmacy) throws SQLException{
+
+        String db_stmt = "DROP TABLE PHARMACY";
+        Statement stmt = conn.createStatement();
+
+        stmt.execute(db_stmt);
+    }
+    public void deletePatient(Patient patient) throws SQLException{
+
+        String db_stmt = "DROP TABLE PATIENT";
+        Statement stmt = conn.createStatement();
+
+        stmt.execute(db_stmt);
+    }
+
+
+
 }

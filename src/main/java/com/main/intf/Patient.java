@@ -24,8 +24,8 @@ public class Patient  implements FileIO<Patient>, DbInterface  {
     public String assignedPersonnel;
     public int PatientID;
     // Date and time functions
-    Date dateOfBirth;
-    Date reportTime;
+    public  Date dateOfBirth;
+    public  Date reportTime;
 
     public Patient(String name, String dateOfBirth, String sickness, String assignedPersonnel) throws ParseException {
         Random rand = new Random();
@@ -120,12 +120,24 @@ public class Patient  implements FileIO<Patient>, DbInterface  {
     }
 
     @Override
-    public void writeToDb(Db db) {
+    public void writeToDb(Db db)
+    {
 
     }
 
     @Override
-    public void readFromDb(Db db) {
+    public void readFromDb(Db db)
+    {
 
+    }
+
+    @Override
+    public void writeToFile(BufferedWriter writer) throws IOException {
+
+    }
+
+    @Override
+    public List<Patient> readFromFile(BufferedReader reader) {
+        return null;
     }
 }

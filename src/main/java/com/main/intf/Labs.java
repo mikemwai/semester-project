@@ -97,5 +97,15 @@ public class Labs implements FileIO<Labs>, DbInterface {
     public void readFromDb(Db db) {
 
     }
+
+    @Override
+    public void writeToFile(BufferedWriter writer) throws IOException {
+
+    }
+
+    @Override
+    public List<Patient> readFromFile(BufferedReader reader) {
+        return null;
+    }
 }
 

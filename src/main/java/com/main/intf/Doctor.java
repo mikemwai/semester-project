@@ -103,5 +103,15 @@ public class Doctor implements FileIO<Doctor>, DbInterface {
     public void readFromDb(Db db) {
     }
 
+    @Override
+    public void writeToFile(BufferedWriter writer) throws IOException {
+
+    }
+
+    @Override
+    public List<Patient> readFromFile(BufferedReader reader) {
+        return null;
+    }
+
 
 }

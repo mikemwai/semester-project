@@ -17,7 +17,14 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Console.main(args);
+       // Console.main(args);
+        try {
+            Db db = new Db();
+
+        } catch (SQLException e){
+            LOGGER.error(e);
+            System.exit(1);
+        }
 
     }
 }
