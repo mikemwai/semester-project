@@ -214,7 +214,7 @@ public class Db {
     }
     public void deletePatient(Patient patient) throws SQLException{
 
-        String db_stmt = "DROP TABLE PATIENT";
+        String db_stmt = "DROP TABLE DOCTOR;";
         Statement stmt = conn.createStatement();
 
         stmt.execute(db_stmt);
