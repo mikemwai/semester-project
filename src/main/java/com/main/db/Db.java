@@ -35,13 +35,58 @@ public class Db {
     // @ Precious fix this to be correct statements, its throwing errors.
     // VARCHAR(100)
     //static String DoctorDbFormat = "CREATE TABLE \"Doctor\" ( \"name\" TEXT NOT NULL, \"Patient_ID\" INTEGER NOT NULL, \"profession\" TEXT NOT NULL, \"diagnosis\" TEXT NOT NULL, PRIMARY KEY(\"name\"),FOREIGN KEY (\"Patient_ID\") REFERENCES Patients (Patient_ID), Pharmacy (Patient_ID)";
-    static String DoctorDbFormat = "CREATE TABLE \"Doctor\" ( \"name\" TEXT NOT NULL, \"Patient_ID\" INTEGER NOT NULL, \"profession\" TEXT NOT NULL, \"diagnosis\" TEXT NOT NULL, PRIMARY KEY(\"name\")";
+    static String DoctorDbFormat = """
+            CREATE TABLE IF NOT EXISTS "Doctor" (
+              name TEXT NOT NULL,
+              Patient_ID INTEGER NOT NULL,
+              profession TEXT NOT NULL,
+              Doctor_ID INTEGER NOT NULL,
+              diagnosis TEXT NOT NULL,
+              PRIMARY KEY(Doctor_ID)
+            );
+            """;
 
-    static String PatientsDbFormat = "CREATE TABLE \"Patient\" ( \"patient_ID\" INTEGER NOT NULL, \"name\" TEXT NOT NULL, \"dateOfBirth\" DATE NOT NULL, \"reportTime\" DATE NOT NULL, \"sickness\" TEXT NOT NULL, \"assignedPersonnel\" TEXT NOT NULL, PRIMARY KEY(\"patient_ID\") FOREIGN KEY (\"assignedPersonnel\") REFERENCES Pharmacy (assignedPersonnel), Labs (assignedPersonnel), Doctor(assignedPersonnel)  )";
+    static String PatientsDbFormat = """
+            CREATE TABLE IF NOT EXISTS "Patient"(
+                 Patient_ID INTEGER NOT NULL,
+                 name TEXT NOT NULL,
+                 dateOfBirth DATE NOT NULL,
+                 reportTime DATE NOT NULL,
+                 sickness TEXT NOT NULL,
+                 assignedPersonnel TEXT NOT NULL,
+                 PRIMARY KEY(Patient_ID),
+                 FOREIGN KEY (assignedPersonnel) REFERENCES Pharmacy (assignedPersonnel),
+                 FOREIGN KEY (assignedPersonnel) REFERENCES Labs (assignedPersonnel),
+                 FOREIGN KEY (assignedPersonnel) REFERENCES Doctor(assignedPersonnel)
+            );""";
 
-    static String LabsDbFormat = "CREATE TABLE \"Labs\" ( \"name\" TEXT NOT NULL, \"specimen\" TEXT NOT NULL, \"results\" TEXT NOT NULL, \"date\" DATE NOT NULL, \"personnelId\" INTEGER NOT NULL, \"cost\" FLOAT NOT NULL, \"assignedPersonnel\" TEXT NOT NULL, PRIMARY KEY(\"personnelId\"), FOREIGN KEY (\"assignedPersonnel\") REFERENCES Pharmacy(assignedPersonnel), Doctor(assignedPersonnel),)";
+    static String LabsDbFormat = """
+            CREATE TABLE IF NOT EXISTS "Labs" (
+                Name VARCHAR(20) NOT NULL,
+                Specimen TEXT NOT NULL,
+                Results TEXT NOT NULL,
+                date DATE NOT NULL,
+                personnelID INTEGER NOT NULL,
+                cost FLOAT NOT NULL,
+                assignedPersonnel TEXT NOT NULL,
+                PRIMARY KEY(personnelId),
+            FOREIGN KEY (assignedPersonnel) REFERENCES Pharmacy(assignedPersonnel),
+            FOREIGN KEY (assignedPersonnel) REFERENCES Doctor(assignedPersonnel)
 
-    static String PharmacyDbFormat = "CREATE TABLE \"Pharmacy\" ( \"name\" TEXT NOT NULL, \"ailment\" TEXT NOT NULL, \"assignedPersonnel\" TEXT NOT NULL, \"patient_ID\" INTEGER NOT NULL, \"medicine\" INTEGER NOT NULL, \"price\" FLOAT NOT NULL, PRIMARY KEY(\"patient_ID\"), FOREIGN KEY (\"patient_ID\") REFERENCES Doctor(Patient_ID), Patients(Patient_ID)";
+            );""";
+
+    static String PharmacyDbFormat = """
+    CREATE TABLE IF NOT EXISTS  Pharmacy (
+            name TEXT NOT NULL,
+            ailment TEXT NOT NULL,
+            assignedPersonnel TEXT NOT NULL,
+            patient_ID INTEGER NOT NULL,
+            medicine INTEGER NOT NULL,
+            price FLOAT NOT NULL,
+            PRIMARY KEY(patient_ID),
+            FOREIGN KEY (patient_ID) REFERENCES Doctor(Patient_ID),
+            FOREIGN KEY (patient_ID) REFERENCES Patients(Patient_ID)
+         );""";
 
     // connection to the database.
     static Connection conn;
@@ -94,10 +139,11 @@ public class Db {
         // execute the database statements.
 
         try {
-            stmt.execute(PatientsDbFormat);
             stmt.execute(LabsDbFormat);
-            stmt.execute(PharmacyDbFormat);
+
             stmt.execute(DoctorDbFormat);
+            stmt.execute(PatientsDbFormat);
+            stmt.execute(PharmacyDbFormat);
 
         } catch (SQLException e) {
             // log the error.
