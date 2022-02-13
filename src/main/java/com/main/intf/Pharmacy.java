@@ -18,12 +18,12 @@ public class Pharmacy implements FileIO<Pharmacy>, DbInterface
     public  static final File PHARMACY_FILE = new File("./pharmacy.csv");
 
     // String functions.
-    String name;
-    String ailment;
+    public String name;
+    public String ailment;
     public  String assignedPersonnel;
-    int PatientID;
-    String medicine;
-    String price;
+    public int PatientID;
+    public String medicine;
+    public String price;
 
     public Pharmacy(String name, String ailment, String assignedPersonnel, int PatientID, String medicine,String price)
     {
@@ -120,5 +120,15 @@ public class Pharmacy implements FileIO<Pharmacy>, DbInterface
     public void readFromDb(Db db)
     {
 
+    }
+
+    @Override
+    public void writeToFile(BufferedWriter writer) throws IOException {
+
+    }
+
+    @Override
+    public List<Patient> readFromFile(BufferedReader reader) {
+        return null;
     }
 }

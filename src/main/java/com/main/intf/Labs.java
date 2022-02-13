@@ -16,13 +16,13 @@ public class Labs implements FileIO<Labs>, DbInterface {
 
     public String assignedPersonnel;
 
-    String name;
-    String specimen;
-    String results;
-    String date;
+    public String name;
+    public String specimen;
+    public String results;
+    public String date;
 
-    int personnelId;
-    int cost;
+    public int personnelId;
+    public int cost;
 
     public Labs(String name, String specimen, String assignedPersonnel, String date, int cost, String results) {
         Random rand = new Random();
@@ -74,7 +74,7 @@ public class Labs implements FileIO<Labs>, DbInterface {
         return labsList;
     }
 
-    private Labs parseFromFile(String data) {
+    public Labs parseFromFile(String data) {
         // split into string
         String[] fields = data.split(",");
         return new Labs(
@@ -96,6 +96,16 @@ public class Labs implements FileIO<Labs>, DbInterface {
     @Override
     public void readFromDb(Db db) {
 
+    }
+
+    @Override
+    public void writeToFile(BufferedWriter writer) throws IOException {
+
+    }
+
+    @Override
+    public List<Patient> readFromFile(BufferedReader reader) {
+        return null;
     }
 }
 

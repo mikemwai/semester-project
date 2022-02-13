@@ -1,5 +1,6 @@
 package com.main;
 
+import com.main.db.Db;
 import com.main.intf.Doctor;
 import com.main.intf.Labs;
 import com.main.intf.Patient;
@@ -173,7 +174,7 @@ public class Console {
     /*
      * Start the registration process.
      * */
-    private void startRegistration() {
+    public void startRegistration() {
 
         // Everything else.
         System.out.println("Welcome to registration :)\n" +
@@ -203,9 +204,13 @@ public class Console {
         System.out.println("ASSIGNED TO:\t" + assignedPersonnel);
         System.out.println("============================================");
 
+
         try {
             // create the patient class.
             patient = new Patient(name, dob, ailment, assignedPersonnel);
+
+            Db db = new Db();
+            db.insertPatient(patient);
 
             patient.writeToFile();
             // Print diagnostics
@@ -226,7 +231,7 @@ public class Console {
 
     }
 
-    private boolean doctorsAnalysis() {
+    public boolean doctorsAnalysis() {
 
         System.out.println("====================================================");
         System.out.println("DOCTOR ANALYSIS");
@@ -268,7 +273,7 @@ public class Console {
         return decision.startsWith("y");
     }
 
-    private void pharmacyAnalysis() {
+    public void pharmacyAnalysis() {
         System.out.println("==============================================");
         System.out.println("PHARMACY DEPARTMENT");
         System.out.println("==============================================");
@@ -301,7 +306,7 @@ public class Console {
 
     }
 
-    private void labResults() {
+     public void labResults() {
         System.out.println("===========================================");
         System.out.println("LAB ANALYSIS");
         System.out.println("===========================================");

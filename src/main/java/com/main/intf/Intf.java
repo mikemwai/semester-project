@@ -45,5 +45,9 @@ interface DbInterface {
     void writeToDb(Db db);
 
     void readFromDb(Db db);
+
+    void writeToFile(BufferedWriter writer) throws IOException;
+
+    List<Patient> readFromFile(BufferedReader reader);
 }
 

@@ -20,11 +20,11 @@ public class Doctor implements FileIO<Doctor>, DbInterface {
 
     public  String name;
 
-    String profession;
+    public String profession;
 
-    int patientId;
+    public int patientId;
 
-    String diagnosis;
+    public String diagnosis;
 
 
     public Doctor(String profession,int patientId, String diagnosis) {
@@ -86,7 +86,7 @@ public class Doctor implements FileIO<Doctor>, DbInterface {
                 fields[2]);
     }
     // Assign a random doctor to this patient.
-    private String assignRandomDoctor(){
+    public String assignRandomDoctor(){
         String[] doctor = {"Juraj Toril", "Ziyaettin Darko", "Tu Nerthus", "Shayne Shula", "Cailyn Zdenko"};
         Random random = new Random();
 
@@ -101,6 +101,16 @@ public class Doctor implements FileIO<Doctor>, DbInterface {
 
     @Override
     public void readFromDb(Db db) {
+    }
+
+    @Override
+    public void writeToFile(BufferedWriter writer) throws IOException {
+
+    }
+
+    @Override
+    public List<Patient> readFromFile(BufferedReader reader) {
+        return null;
     }
 
 
