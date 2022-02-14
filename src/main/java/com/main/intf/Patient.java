@@ -51,6 +51,16 @@ public class Patient  implements FileIO<Patient>, DbInterface  {
 
     }
 
+    public Patient(String name,int patientID, java.sql.Date dob, java.sql.Date reportTime, String sickness, String assignedPersonnel)
+    {
+        this.name = name;
+        this.sickness = sickness;
+        this.PatientID= patientID;
+        this.dateOfBirth = dob;
+        this.reportTime = reportTime;
+        this.assignedPersonnel = assignedPersonnel;
+    }
+
 
     @Override
     public void writeToFile() throws IOException {
