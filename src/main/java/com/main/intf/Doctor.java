@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.Random;
 
 
-public class Doctor implements FileIO<Doctor>, DbInterface {
+public class Doctor implements FileIO<Doctor>, DbInterface
+{
 
     public static final File DOCTORS_FILE = new File("./doctors.csv");
     private static final Logger LOGGER = LogManager.getLogger();
